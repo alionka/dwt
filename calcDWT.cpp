@@ -203,7 +203,7 @@ void oneD_columns(int width, int high, float **Y420, float **Cb420, float **Cr42
   free2D(high/2, width/2, newCr420);
 }
 
-void oneD_Columns_i(int width, int high, float **Y420, float **Cb420, float **Cr420) {
+void oneD_Columns_inv(int width, int high, float **Y420, float **Cb420, float **Cr420) {
   float **newY420 = malloc2D(high, width);
   float **newCb420 = malloc2D(high/2, width/2);
   float **newCr420 = malloc2D(high/2, width/2);
@@ -236,6 +236,6 @@ void YCbCr420_DWT(int ancho, int alto, float **Y420, float **Cb420, float **Cr42
 void DWT_YCbCr420(int ancho, int alto, float **Y420, float **Cb420, float **Cr420) {
   for (int nivel=5, an = ancho/pow(2,nivel), al = alto/pow(2,nivel); nivel >= 0; nivel--, an *= 2, al *= 2) {
     oneD_rows_inv(an, al, Y420, Cb420, Cr420);
-    oneD_Columns_i(an, al, Y420, Cb420, Cr420);
+    oneD_Columns_inv(an, al, Y420, Cb420, Cr420);
   }
 }
