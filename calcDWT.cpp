@@ -16,26 +16,27 @@ void __inline free2D(int width, int high, float **matrix) {
   free(matrix);
 }
 
-void traspose_matriz(int width, int high, int **matrix, int **matrixT) {
+void traspose_matrix(int width, int high, int **matrix, int **matrixT) {
   for (int y = 0; y < high; y++)
     for (int x = 0; x < width; x++)
       matrixT[x][y] = matrix[y][x];
 }
-void 1D(int x, int y, int width, float *comp, bool even){
+
+void oneD(int x, int y, int width, float *comp, bool even){
 
 	float pixel = 0.0;
 	float p[2];
 
 	if(even) {
-		pixell = comp[x] + fpb[0];
+		pixel = comp[x] + fpb[0];
 		for(int i = 0; i < FPB; i++) {
 			if(x - i < 0) 
-				p[0] = comp[i -x];
+				p[0] = comp[i - x];
 			else 
 				p[0] = comp[x - i];
 
 			if (x + i >= width)
-				p[1] = comp[width-(i-(width-x))-2];
+				p[1] = comp[width - ( i - ( width - x )) - 2];
 			else
 				p[1] = comp[x + i];
 			pixel += (p[0] * fpb[i]) + (p[1] * fpb[i]);
@@ -49,7 +50,7 @@ void 1D(int x, int y, int width, float *comp, bool even){
         else
           p[0] = comp[x - i];
         if (x + i >= width)
-          p[1] = comp[width-(i-(width-x))-2];
+          p[1] = comp[width - (i - (width - x)) -2];
         else
           p[1] = comp[x + i];
         pixel += (p[0] * fpa[i]) + (p[1] * fpa[i]);
@@ -57,7 +58,7 @@ void 1D(int x, int y, int width, float *comp, bool even){
 	return pixel;
 }
 
-void 1Dinv(int x, int y, int width, float *comp, bool even){
+void oneDinv(int x, int y, int width, float *comp, bool even){
 	float pixel = 0.0;
 	float p[2];
 
@@ -95,7 +96,11 @@ void 1Dinv(int x, int y, int width, float *comp, bool even){
     }
 }
 
-void 1D_rows(int width, int high, float **Y420, float **Cb420, float **Cr420) {
+//fin 1D
+
+// Hola 2D
+
+void oneD_rows(int width, int high, float **Y420, float **Cb420, float **Cr420) {
   float **newY420 = malloc2D(width, high);
   float **newCb420 = malloc2D(width/2, high/2);
   float **newCr420 = malloc2D(width/2, high/2);
@@ -135,7 +140,7 @@ void 1D_rows(int width, int high, float **Y420, float **Cb420, float **Cr420) {
   free_2d_f(width/2, high/2, newCr420);
 }
 
-void 1D_rows_inv(int width, int high, float **Y420, float **Cb420, float **Cr420) {
+void oneD_rows_inv(int width, int high, float **Y420, float **Cb420, float **Cr420) {
   float **newY420 = malloc_2d_f(width, high);
   float **newCb420 = malloc_2d_f(width/2, high/2);
   float **newCr420 = malloc_2d_f(width/2, high/2);
@@ -176,49 +181,61 @@ void 1D_rows_inv(int width, int high, float **Y420, float **Cb420, float **Cr420
   free_2d_f(width/2, high/2, newCr420);
 }
 
-void 1D_columns(int width, int high, float **Y420, float **Cb420, float **Cr420) {
+void oneD_columns(int width, int high, float **Y420, float **Cb420, float **Cr420) {
   float **newY420 = malloc2D(high, width);
   float **newCb420 = malloc2D(high/2, width/2);
   float **newCr420 = malloc2D(high/2, width/2);
 
   // trasponer matrices
-  traspose_matriz(width, high, Y420, newY420);
-  traspose_matriz(width/2, high/2, Cb420, newCb420);
-  traspose_matriz(width/2, high/2, Cr420, newCr420);
+  traspose_matrix(width, high, Y420, newY420);
+  traspose_matrix(width/2, high/2, Cb420, newCb420);
+  traspose_matrix(width/2, high/2, Cr420, newCr420);
 
-  1D_rows(high, width, newY420, newCb420, newCr420);
+  oneD_rows(high, width, newY420, newCb420, newCr420);
 
   // retrasponer matrices
-  traspose_matriz(high, width, newY420, Y420);
-  traspose_matriz(high/2, width/2, newCb420, Cb420);
-  traspose_matriz(high/2, width/2, newCr420, Cr420);
+  traspose_matrix(high, width, newY420, Y420);
+  traspose_matrix(high/2, width/2, newCb420, Cb420);
+  traspose_matrix(high/2, width/2, newCr420, Cr420);
 
   free2D(high, width, newY420);
   free2D(high/2, width/2, newCb420);
   free2D(high/2, width/2, newCr420);
 }
 
-void 1DnewColumns_i(int width, int high, float **Y420, float **Cb420, float **Cr420) {
+void oneD_Columns_i(int width, int high, float **Y420, float **Cb420, float **Cr420) {
   float **newY420 = malloc2D(high, width);
   float **newCb420 = malloc2D(high/2, width/2);
   float **newCr420 = malloc2D(high/2, width/2);
   
   // trasponer matrices
-  traspose_matriz(width, high, Y420, newY420);
-  traspose_matriz(width/2, high/2, Cb420, newCb420);
-  traspose_matriz(width/2, high/2, Cr420, newCr420);
+  traspose_matrix(width, high, Y420, newY420);
+  traspose_matrix(width/2, high/2, Cb420, newCb420);
+  traspose_matrix(width/2, high/2, Cr420, newCr420);
   
-  1D_rows_inv(high, width, newY420, newCb420, newCr420);
+  oneD_rows_inv(high, width, newY420, newCb420, newCr420);
   
   // retrasponer matrices
-  traspose_matriz(high, width, newY420, Y420);
-  traspose_matriz(high/2, width/2, newCb420, Cb420);
-  traspose_matriz(high/2, width/2, newCr420, Cr420);
+  traspose_matrix(high, width, newY420, Y420);
+  traspose_matrix(high/2, width/2, newCb420, Cb420);
+  traspose_matrix(high/2, width/2, newCr420, Cr420);
   
   free2D(high, width, newY420);
   free2D(high/2, width/2, newCb420);
   free2D(high/2, width/2, newCr420);
 }
 
-//fin 1D
 
+void YCbCr420_DWT(int ancho, int alto, float **Y420, float **Cb420, float **Cr420) {
+  for (int nivel=0, an = ancho, al = alto; nivel < 6; nivel++, an /= 2, al /= 2) {
+    oneD_rows(an, al, Y420, Cb420, Cr420);
+    oneD_columns(an, al, Y420, Cb420, Cr420);
+  }
+}
+
+void DWT_YCbCr420(int ancho, int alto, float **Y420, float **Cb420, float **Cr420) {
+  for (int nivel=5, an = ancho/pow(2,nivel), al = alto/pow(2,nivel); nivel >= 0; nivel--, an *= 2, al *= 2) {
+    oneD_rows_inv(an, al, Y420, Cb420, Cr420);
+    oneD_Columns_i(an, al, Y420, Cb420, Cr420);
+  }
+}
