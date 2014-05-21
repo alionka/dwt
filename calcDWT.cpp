@@ -28,7 +28,7 @@ float oneD(int x, int y, int width, float *comp, bool even){
 	float p[2];
 
 	if(even) {
-		pixel = comp[x] + fpb[0];
+		pixel = comp[x] * fpb[0];
 		for(int i = 0; i < 5; i++) {
 			if(x - i < 0) 
 				p[0] = comp[i - x];
@@ -160,9 +160,9 @@ void oneD_rows_inv(int width, int high, float **Y420, float **Cb420, float **Cr4
       else { // es impar => resultado del paso high
         newY420[y][x] = Y420[y][x/2 + width/2];
         if (y < (high/2) && x < (width/2)) {
-          int width_2 = width/2;
-          newCb420[y][x] = Cb420[y][x/2 + width_2/2];
-          newCr420[y][x] = Cr420[y][x/2 + width_2/2];
+          
+          newCb420[y][x] = Cb420[y][x/2 + width/4];
+          newCr420[y][x] = Cr420[y][x/2 + width/4];
         }
       }
     }
@@ -228,16 +228,16 @@ void oneD_Columns_inv(int width, int high, float **Y420, float **Cb420, float **
 }
 
 
-void YCbCr420_DWT(int ancho, int alto, float **Y420, float **Cb420, float **Cr420) {
-  for (int nivel=0, an = ancho, al = alto; nivel < 6; nivel++, an /= 2, al /= 2) {
-    oneD_rows(an, al, Y420, Cb420, Cr420);
-    oneD_columns(an, al, Y420, Cb420, Cr420);
+void YCbCr420_DWT(int width, int high, float **Y420, float **Cb420, float **Cr420) {
+  for (int level = 0, x = width, y = high; level < 6; level++, x /= 2, y /= 2) {
+    oneD_rows(x, y, Y420, Cb420, Cr420);
+    oneD_columns(x, y, Y420, Cb420, Cr420);
   }
 }
 
-void DWT_YCbCr420(int ancho, int alto, float **Y420, float **Cb420, float **Cr420) {
-  for (int nivel=5, an = ancho/pow(2,nivel), al = alto/pow(2,nivel); nivel >= 0; nivel--, an *= 2, al *= 2) {
-    oneD_rows_inv(an, al, Y420, Cb420, Cr420);
-    oneD_Columns_inv(an, al, Y420, Cb420, Cr420);
+void DWT_YCbCr420(int width, int high, float **Y420, float **Cb420, float **Cr420) {
+  for (int level=5, x = width/pow(2,level), y = high/pow(2,level); level >= 0; level--, x *= 2, y *= 2) {
+    oneD_rows_inv(x, y, Y420, Cb420, Cr420);
+    oneD_Columns_inv(x, y, Y420, Cb420, Cr420);
   }
 }
