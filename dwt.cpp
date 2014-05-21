@@ -76,6 +76,43 @@ int int main(int argc, char const *argv[])
     ReservaPlano(width/2, high/2, &Cb420);
     ReservaPlano(width/2, high/2, &Cr420);
 
+    // switch(option) {
+    // 	case _420_DWT:
+    // 		if(CargaYCbCr420(input_file,width,high,Y420,Cb420,Cr420) != 0){
+    // 			printf("Cloud not load input file.\n");	
+    // 			exit(1);
+    // 		}
+
+    // 		break;
+    // 	case DWT_420:
+
+    // 	break;
+    // }
+    if( option == _420_DWT) {
+    	if(CargaYCbCr420(input_file,width,high,Y420,Cb420,Cr420) != 0) {
+    		printf("Cloud not load input file.\n");	
+    		exit(1);
+    	}
+    	ConversionYCbCr420aDWT(width, high, Y420, Cb420, Cr420);
+
+    	if(GuardaDWT420(output_file, width, high, Y420, Cb420, Cr420) != 0) {
+    		printf("Cloud not save output file\n");
+    		exit(1);
+    	}
+    }
+
+    if( option == DWT_420) {
+    	if(CargaDWT420(input_file,width,high,Y420,Cb420,Cr420) != 0) {
+    		printf("Cloud not load input file.\n");	
+    		exit(1);
+    	}
+    	ConversionDWTaYCbCr420(width, high, Y420, Cb420, Cr420);
+
+    	if(GuardaYCbCr420(output_file, width, high, Y420, Cb420, Cr420) != 0) {
+    		printf("Cloud not save output file\n");
+    		exit(1);
+    	}
+    }
     LiberaPlano(width, high, &Y420);
     LiberaPlano(width/2, high/2, &Cb420);
     LiberaPlano(width/2, high/2, &Cr420);
